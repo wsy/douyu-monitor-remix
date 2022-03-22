@@ -14,4 +14,17 @@ interface IGiftData {
     data: IGiftList
 }
 
-declare let STT: any
+declare class STT {
+    public escape(v: string): string
+    public unescape(v: string): string
+    public deserialize(v: string): string
+}
+
+declare class Ex_WebSocket_UnLogin {
+    constructor(
+        rid: string,
+        msgHandler: (msg: string) => void,
+        closeHandler?: () => void,
+    )
+    public close(): void
+}

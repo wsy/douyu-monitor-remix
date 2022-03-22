@@ -83,6 +83,33 @@ export function getBagGiftData(): Promise<IGiftList> {
   });
 }
 
+export function getRealRid(rid: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fetch(
+      "https://m.douyu.com/" + rid,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    )
+      .then((res) => {
+        return res.text();
+      })
+      .then((ret) => {
+        let rid = getStrMiddle(ret, `"rid":`, `,"`);
+        resolve(rid);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 export function getRandom(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min) + min);
+}
+
+export function getStrMiddle(str: string, before: string, after: string): string {
+	let m = str.match(new RegExp(before + '(.*?)' + after));
+	return m ? m[1] : "";
 }
