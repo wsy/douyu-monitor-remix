@@ -1,0 +1,6 @@
+@import "./themes/index.scss";
+.haha {
+    .haha1 {
+        @include fontColor("txtColor");
+    }
+}

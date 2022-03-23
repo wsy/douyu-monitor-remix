@@ -5,10 +5,12 @@
   "license": "",
   "sideEffects": false,
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
+    "build": "concurrently \"npm run sass\" \"remix build\"",
+    "dev": "concurrently \"npm run sass:dev\" \"remix dev\"",
     "postinstall": "remix setup node",
-    "start": "remix-serve build"
+    "start": "remix-serve build",
+    "sass:dev": "sass --watch --no-source-map app/:app/",
+    "sass": "sass --no-source-map app/:app/"
   },
   "dependencies": {
     "@remix-run/react": "^1.3.2",
@@ -25,7 +27,9 @@
     "@remix-run/eslint-config": "^1.3.2",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
+    "concurrently": "^7.0.0",
     "eslint": "^8.11.0",
+    "sass": "^1.49.9",
     "typescript": "^4.5.5"
   },
   "engines": {
