@@ -1,14 +1,21 @@
 import { LinksFunction, LoaderFunction, useLoaderData } from "remix";
 import { getBagGiftData, getRoomGiftData } from "~/utils";
 import styleVantBase from "react-vant/es/styles/base.css";
-import style from "~/styles/index.css";
+import styleGlobal from "~/styles/index.css";
+import styleFansLevel from "~/resources/fansLevel.css";
+import styleRoomAdmin from "~/resources/roomAdmin.css";
+import styleUserLevel from "~/resources/userLevel.css";
+
 import { useEffect } from "react";
 import useWebsocket from "~/hooks/useWebsocket";
 
 export const links: LinksFunction = () => {
 	return [
 		{rel: "stylesheet", href: styleVantBase},
-		{rel: "stylesheet", href: style}
+		{rel: "stylesheet", href: styleGlobal},
+		{rel: "preload", href: styleFansLevel},
+		{rel: "preload", href: styleRoomAdmin},
+		{rel: "preload", href: styleUserLevel},
 	]
 }
 
