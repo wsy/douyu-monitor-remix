@@ -5,14 +5,17 @@ import styleGlobal from "~/styles/index.css";
 import styleFansLevel from "~/resources/fansLevel.css";
 import styleRoomAdmin from "~/resources/roomAdmin.css";
 import styleUserLevel from "~/resources/userLevel.css";
+import styleMonitor from "~/styles/monitor.css";
 
 import { useEffect } from "react";
 import useWebsocket from "~/hooks/useWebsocket";
+import Danmaku from "~/components/Danmaku";
 
 export const links: LinksFunction = () => {
 	return [
 		{rel: "stylesheet", href: styleVantBase},
 		{rel: "stylesheet", href: styleGlobal},
+		{rel: "stylesheet", href: styleMonitor},
 		{rel: "preload", href: styleFansLevel},
 		{rel: "preload", href: styleRoomAdmin},
 		{rel: "preload", href: styleUserLevel},
@@ -20,6 +23,7 @@ export const links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({params}) => {
+	
 	const { rid } = params;
 	let allGift: IGiftData = {
 		"prefix": "https://gfs-op.douyucdn.cn/dygift",
@@ -39,6 +43,7 @@ export const loader: LoaderFunction = async ({params}) => {
 const Index = () => {
 	const { rid, allGift } = useLoaderData();
 	const { connectWs, closeWs, danmakuList } = useWebsocket({}, allGift);
+
 	useEffect(() => {
 		window.rid = rid;
 		connectWs(rid);
@@ -49,13 +54,9 @@ const Index = () => {
 	}, []);
     return (
 		<>
-			<div className="haha"><span className="haha1">dsa</span></div>
-			<div className="haha1">我是2</div>
-			{danmakuList.map(item => {
-				return (
-					<div key={item.key}>{item.txt}</div>
-				)
-			})}
+			<div className="monitor" style={{flexDirection: "column", fontSize: 14}}>
+				<Danmaku></Danmaku>
+			</div>
 		</>
     )
 }

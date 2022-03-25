@@ -1,0 +1,1 @@
+.monitor{width:100%;height:100%;overflow:hidden;display:flex;flex-direction:column;font-size:14;user-select:none}[data-theme=day] .monitor{background:#fff}[data-theme=night] .monitor{background:#25262a}
