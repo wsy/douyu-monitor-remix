@@ -1,4 +1,6 @@
 @import "./themes/index.scss";
+// 引入components下所有的style
+@import "../components/Danmaku/styles/index.scss";
 .monitor {
     @include backgroundColor("backgroundColor");
     width: 100%;
@@ -10,4 +12,39 @@
     flex-direction: column;
     font-size: 14;
     user-select: none;
+    > div {
+        height: 100%;
+    }
+
+    .splitline {
+        @include backgroundColor("splitLineColor");
+    }
+}
+
+.popup {
+    .popup-top {
+        user-select: none;
+        height: 32px;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        padding: 0 10px;
+        box-sizing: border-box;
+        text-align: right;
+        border-bottom: 1px solid rgb(227, 227, 227);
+        > div {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .douyuex {
+            position: absolute;
+            left: 0;
+        }
+        .github {
+            position: absolute;
+            left: 34px;
+        }
+    }
 }

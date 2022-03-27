@@ -88,3 +88,22 @@ interface IGift {
     hits: string; // 连击
     key: string | number; // 唯一标识
 }
+
+interface IOptions {
+    mode: "day" | "night"; // 日间模式还是夜间模式。值：day/night
+    switch: string[]; // 每个模块开关，同时指定了顺序。值：["enter", "gift", "danmaku"]
+    direction: "column" | "row"; // 纵向还是横向排列。值：row/column
+    fontSize: number; // 字号大小
+    // align: string;
+    // size: Size;
+    // order: Size;
+    
+    // threshold: number;
+    // transparent: boolean;
+    // animation: boolean;
+    // isSaveData: boolean;
+    // danmaku: Danmaku;
+    // enter: Enter;
+    // gift: Gift;
+    [option: string]: any
+}

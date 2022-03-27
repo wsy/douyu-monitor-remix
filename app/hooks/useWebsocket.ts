@@ -87,7 +87,14 @@ const useWebsocket = (options: any, allGiftData: IGiftData) => {
             isVip: data.ail == "453/" || data.ail == "454/",
             key: data.cid,
         };
-        setDanmakuList(list => [...list, obj]);
+        setDanmakuList(list => {
+            if (list.length > 50) {
+                return [...list.splice(1), obj];
+            } else {
+                return [...list, obj];
+            }
+        });
+        
     }
 
     const handleEnter = (data: any) => {
