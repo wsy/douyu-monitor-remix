@@ -1,5 +1,5 @@
-import { FC, useRef, useState } from "react";
-import { Virtuoso } from "react-virtuoso";
+import { FC, useEffect, useRef, useState } from "react";
+import { useScroll } from "~/hooks/useScroll";
 import { getFlexStyle } from "~/utils";
 import Default from "./templates/Default/Default";
 
@@ -10,24 +10,28 @@ interface IProps {
 
 const FLAG = "danmaku";
 
-const renderDanmakuItem = (index: number, data: IDanmaku) => {
-	return <Default data={data}></Default>
-}
-
 const Danmaku: FC<IProps> = ({options, danmakuList}) => {
-	const virtuosoRef = useRef<any>(null);
-	const [showButton, setShowButton] = useState(false);
+	const { isLock, onScroll, onScrollUpdate, goToScrollBottom } = useScroll();
+	const wrapRef = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		onScrollUpdate(wrapRef.current)
+	}, [danmakuList, onScrollUpdate]);
 
+	useEffect(() => {
+		if (!wrapRef.current) return
+		wrapRef.current.addEventListener("mousewheel", () => {
+			onScroll(wrapRef.current);
+		})
+		wrapRef.current.addEventListener("touchmove", () => {
+			onScroll(wrapRef.current);
+		})
+	}, [onScroll]);
 	return (
-		<div className={FLAG} style={getFlexStyle(options, FLAG)}>
-			<Virtuoso
-				ref={virtuosoRef}
-				data={danmakuList}
-				itemContent={renderDanmakuItem}
-				atBottomStateChange={(isBottom) => setShowButton(!isBottom)}
-				followOutput={"auto"}
-			></Virtuoso>
-			{showButton && <div className="gobottom" onClick={(e) => {e.stopPropagation();virtuosoRef.current.scrollToIndex({ index: danmakuList.length - 1 })}}>回到底部</div>}
+		<div ref={wrapRef} className={FLAG} style={getFlexStyle(options, FLAG)}>
+			{danmakuList.map(item => {
+				return <Default key={item.key} data={item}></Default>
+			})}
+			{isLock && <div className="gobottom" onClick={(e) => {e.stopPropagation();goToScrollBottom(wrapRef.current)}}>回到底部</div>}
 		</div>
 	)
 }

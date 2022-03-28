@@ -31,9 +31,9 @@ export const links: LinksFunction = () => {
 		{rel: "stylesheet", href: stylesVant},
 		{rel: "stylesheet", href: stylesGlobal},
 		{rel: "stylesheet", href: stylesMonitor},
-		{rel: "preload", href: stylesFansLevel},
-		{rel: "preload", href: stylesRoomAdmin},
-		{rel: "preload", href: stylesUserLevel},
+		{rel: "stylesheet", href: stylesFansLevel},
+		{rel: "stylesheet", href: stylesRoomAdmin},
+		{rel: "stylesheet", href: stylesUserLevel},
 	]
 }
 
@@ -77,7 +77,6 @@ const Index = () => {
 			window.document.documentElement.setAttribute("data-theme", 'day');
 		}
 	}, [options.mode]);
-	
     return (
 		<>
 			<div className="monitor" style={{flexDirection: options.direction, fontSize: options.fontSize}} onClick={() => setIsShowOptions(true)}>

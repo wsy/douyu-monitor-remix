@@ -38,6 +38,7 @@ const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
             state.direction = payload;
             break;
         case OPTIONS_ACTION.FONTSIZE:
+            document.documentElement.style.setProperty('--avatarSize', String(Number(payload) * 2) + "px");
             state.fontSize = payload;
             break;
         case OPTIONS_ACTION.SIZE:

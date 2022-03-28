@@ -19,6 +19,11 @@
     .splitline {
         @include backgroundColor("splitLineColor");
     }
+    .avatar {
+        width: var(--avatarSize, 28px);
+        height: var(--avatarSize, 28px);
+        border-radius: 50%;
+    }
 }
 
 .popup {
