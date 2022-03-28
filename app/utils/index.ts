@@ -113,3 +113,10 @@ export function getStrMiddle(str: string, before: string, after: string): string
 	let m = str.match(new RegExp(before + '(.*?)' + after));
 	return m ? m[1] : "";
 }
+
+export const getFlexStyle = (options: IOptions, flag: "danmaku" | "gift" | "enter") => {
+	return {
+		flex: options.switch[options.switch.length - 1] === flag ? "1" : `0 0 ${options.size[flag]}%`,
+		order: options.switch.indexOf(flag) * 2 + 1
+	}
+}

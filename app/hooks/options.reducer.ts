@@ -3,6 +3,7 @@ enum OPTIONS_ACTION {
     SWITCH = "switch",
     DIRECTION = "direction",
     FONTSIZE = "fontSize",
+    SIZE = "size",
 }
 
 interface IOptionsAction {
@@ -16,25 +17,33 @@ const defaultOptions: IOptions = {
     switch: ["enter", "gift", "danmaku"],
     direction: "column",
     fontSize: 14,
+    size: {
+        enter: 15,
+        gift: 25,
+        danmaku: 30,
+    },
 };
 
 
 const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
-    switch (action.type) {
+    let { type, payload } = action;
+    switch (type) {
         case OPTIONS_ACTION.RESET:
             state = defaultOptions;
             break;
-        // case OPTIONS_ACTION.SWITCH:
-        //     state.switch = action.payload;
-        //     break;
-        // case OPTIONS_ACTION.DIRECTION:
-        //     state.direction = action.payload;
-        //     break;
-        // case OPTIONS_ACTION.FONTSIZE:
-        //     state.fontSize = action.payload;
-        //     break;
+        case OPTIONS_ACTION.SWITCH:
+            state.switch = payload;
+            break;
+        case OPTIONS_ACTION.DIRECTION:
+            state.direction = payload;
+            break;
+        case OPTIONS_ACTION.FONTSIZE:
+            state.fontSize = payload;
+            break;
+        case OPTIONS_ACTION.SIZE:
+            state.size = {...state.size, ...payload};
+            break;
         default:
-            state[action.type as never] = action.payload;
             break;
     }
     return state;

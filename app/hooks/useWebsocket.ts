@@ -88,7 +88,7 @@ const useWebsocket = (options: any, allGiftData: IGiftData) => {
             key: data.cid,
         };
         setDanmakuList(list => {
-            if (list.length > 50) {
+            if (list.length > 500) {
                 return [...list.splice(1), obj];
             } else {
                 return [...list, obj];

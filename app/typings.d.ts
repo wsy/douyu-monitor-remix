@@ -94,9 +94,9 @@ interface IOptions {
     switch: string[]; // 每个模块开关，同时指定了顺序。值：["enter", "gift", "danmaku"]
     direction: "column" | "row"; // 纵向还是横向排列。值：row/column
     fontSize: number; // 字号大小
-    // align: string;
-    // size: Size;
+    size: Size; // 每个模块的占比%
     // order: Size;
+    // align: string;
     
     // threshold: number;
     // transparent: boolean;
@@ -105,5 +105,11 @@ interface IOptions {
     // danmaku: Danmaku;
     // enter: Enter;
     // gift: Gift;
-    [option: string]: any
+    // [option: string]: any
+}
+
+interface Size {
+    danmaku: number,
+    enter: number,
+    gift: number,
 }

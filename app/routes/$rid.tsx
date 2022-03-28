@@ -11,9 +11,9 @@ import stylesMonitor from "~/styles/monitor.css";
 
 import { useEffect, useState } from "react";
 import useWebsocket from "~/hooks/useWebsocket";
-import Danmaku from "~/components/Danmaku";
+import Danmaku from "~/components/Danmaku/index";
 
-import { Checkbox, Form, Popup, Radio, Slider, Switch, Tabs } from 'react-vant';
+import { Checkbox, Field, Popup, Radio, Slider, Tabs } from 'react-vant';
 import { useImmerReducer } from "use-immer";
 import { defaultOptions, optionsReducer, OPTIONS_ACTION } from "~/hooks/options.reducer";
 import Enter from "~/components/Enter";
@@ -76,7 +76,7 @@ const Index = () => {
 		} else {
 			window.document.documentElement.setAttribute("data-theme", 'day');
 		}
-	}, [options.mode])
+	}, [options.mode]);
 	
     return (
 		<>
@@ -113,28 +113,38 @@ const Index = () => {
 				</div>
 				<Tabs>
 					<Tabs.TabPane title="通用">
-					<Form>
-						<Form.Item label="布局">
+						<Field label="布局">
 							<Checkbox.Group value={options.switch} direction="horizontal" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.SWITCH, payload: v})}>
 								<Checkbox shape="square" name="enter">进场</Checkbox>
 								<Checkbox shape="square" name="gift">礼物</Checkbox>
 								<Checkbox shape="square" name="danmaku">弹幕</Checkbox>
 							</Checkbox.Group>
-						</Form.Item>
-						<Form.Item label="方向">
+						</Field>
+						<Field label="方向">
 							<Radio.Group value={options.direction} defaultValue="column" direction="horizontal" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DIRECTION, payload: v})}>
 								<Radio name="column">纵向</Radio>
 								<Radio name="row">横向</Radio>
 							</Radio.Group>
-						</Form.Item>
-						<Form.Item label="滑块">
-							<Slider value={options.fontSize} min={12} max={30} onChange={(v: number) => {console.log(v);dispatchOptions({type: OPTIONS_ACTION.FONTSIZE, payload: v})}}/>
-						</Form.Item>
-					</Form>
+						</Field>
+						<Field label="滑块">
+							<Slider value={options.fontSize} min={12} max={30} onChange={(v: number) => {dispatchOptions({type: OPTIONS_ACTION.FONTSIZE, payload: v})}}/>
+						</Field>
 					</Tabs.TabPane>
-					<Tabs.TabPane title="弹幕"></Tabs.TabPane>
-					<Tabs.TabPane title="礼物"></Tabs.TabPane>
-					<Tabs.TabPane title="进场"></Tabs.TabPane>
+					<Tabs.TabPane title="弹幕">
+						<Field label="占比">
+							<Slider disabled={options.switch[options.switch.length-1] === "danmaku"} value={options.size.danmaku} onChange={(v: number) => {dispatchOptions({type: OPTIONS_ACTION.SIZE, payload: {danmaku: v}})}}/>
+						</Field>
+					</Tabs.TabPane>
+					<Tabs.TabPane title="礼物">
+						<Field label="占比">
+							<Slider disabled={options.switch[options.switch.length-1] === "gift"} value={options.size.gift} onChange={(v: number) => {dispatchOptions({type: OPTIONS_ACTION.SIZE, payload: {gift: v}})}}/>
+						</Field>
+					</Tabs.TabPane>
+					<Tabs.TabPane title="进场">
+						<Field label="占比">
+							<Slider disabled={options.switch[options.switch.length-1] === "enter"} value={options.size.enter} onChange={(v: number) => {dispatchOptions({type: OPTIONS_ACTION.SIZE, payload: {enter: v}})}}/>
+						</Field>
+					</Tabs.TabPane>
 				</Tabs>
 			</Popup>
 		</>
