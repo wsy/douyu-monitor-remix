@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useScroll } from "~/hooks/useScroll";
 import { getFlexStyle } from "~/utils";
 import Default from "./templates/Default/Default";
@@ -29,7 +29,11 @@ const Danmaku: FC<IProps> = ({options, danmakuList}) => {
 	return (
 		<div ref={wrapRef} className={FLAG} style={getFlexStyle(options, FLAG)}>
 			{danmakuList.map(item => {
-				return <Default key={item.key} data={item}></Default>
+				return <Default key={item.key}
+				data={item}
+				mode={options.mode}
+				showAnimation={options.animation}
+				></Default>
 			})}
 			{isLock && <div className="gobottom" onClick={(e) => {e.stopPropagation();goToScrollBottom(wrapRef.current)}}>回到底部</div>}
 		</div>

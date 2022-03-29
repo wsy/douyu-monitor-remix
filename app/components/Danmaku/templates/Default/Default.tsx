@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { FC } from "react";
 import { danmakuColor } from "~/resources/danmakuColor";
 import { nobleData } from "~/resources/nobleData";
@@ -28,52 +29,46 @@ interface IProps {
 }
 
 const Default: FC<IProps> = (props) => {
-    const {data, mode, showAnimation} = props;
+    const {data} = props;
     const getItemClass = (data: IDanmaku): string => {
-        let ret = "";
-        if (mode === "night") {
-            if (data.isNoble || data.isVip) {
-                ret = "noble-night";
-            }
-            if (data.isSuper) {
-                ret = "super-night";
-            }
+        if (data.isSuper) {
+            return props.mode === "night" ? "super-night" : "super-day";
+        } else if (data.isNoble || data.isVip) {
+            return props.mode === "night" ? "noble-night" : "noble-day";
         } else {
-            if (data.isNoble || data.isVip) {
-                ret = "noble-day";
-            }
-            if (data.isSuper) {
-                ret = "super-day";
-            }
+            return ""
         }
-        return ret;
     }
     return (
-        <div style={{textAlign: "left", justifyContent: "flex-start"}} className={`item ${showAnimation?"fadeInLeft":""} ${getItemClass(data)}`}>
+        <div className={clsx("item", {"fadeInLeft": props.showAnimation}, getItemClass(data))}>
             {/* 等级 */}
-            <span className={`item__level UserLevel ${mode==="night" && Number(data.lv) < 70?"fansLevelNight":""} UserLevel--${data.lv}`}></span>
+            {props.showLevel && <span className={clsx("item__level", {"fansLevelNight": props.mode==="night" && Number(data.lv) < 70}, "UserLevel", `UserLevel--${data.lv}`)}></span>}
             {/* 贵族 */}
+            {props.showNoble && data.isNoble &&
             <span className="item__noble Barrage-icon Barrage-noble">
                 <img src={`${data.nobleLv in nobleData.data ? nobleData.prefix + nobleData.data[data.nobleLv].pic : ""}`} alt="" loading="lazy"/>
-            </span>
+            </span>}
             {/* 粉丝牌 */}
-            <div className={`item__fans ${data.isDiamond ? "is-diamonds" : ""} FansMedal fansLevel-${data.fansLv}`}>
+            {props.showFans && !!data.fansName &&
+            <div className={clsx("item__fans", {"is-diamonds": data.isDiamond}, "FansMedal", `fansLevel-${data.fansLv}`)}>
                 <span className="FansMedal-name">{data.fansName}</span>
                 <img className="FansMedalBox-diamondsIcon" src="https://sta-op.douyucdn.cn/douyu/2021/08/05/02304a1c04587e43ac626ce5ce07d935.png" alt="" loading="lazy"/>
-            </div>
+            </div>}
             {/* 房管 */}
+            {props.showRoomAdmin && data.isRoomAdmin &&
             <span className="item__roomAdmin">
                 <span className="Barrage-icon Barrage-icon--roomAdmin"></span>
-            </span>
+            </span>}
             {/* 头像 */}
-            <span className="item__avatar"><img className="avatar" src={`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`} alt="" loading="lazy" /></span>
+            {props.showAvatar && <span className="item__avatar"><img className="avatar" src={`https://apic.douyucdn.cn/upload/${data.avatar}_small.jpg`} alt="" loading="lazy" /></span>}
             {/* 昵称 */}
-            <span className={`item__name ${data.isSuper ? "super-name":""}`}>
-                <span className="Barrage-roomVipIcon"></span>
+            <span className={clsx("item__name", {"super-name": data.isSuper})}>
+                {/* VIP */}
+                {props.showVip && data.isVip && <span className="Barrage-roomVipIcon"></span>}
                 {data.nn}：
             </span>
             {/* 弹幕 */}
-            <span style={{color: danmakuColor[data.color]}} className="item__txt">{data.txt}</span>
+            <span style={props.showColor ? {color: danmakuColor[data.color]} : {}} className="item__txt">{data.txt}</span>
         </div>
     )
 }

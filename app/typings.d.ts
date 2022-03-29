@@ -62,7 +62,7 @@ interface IDanmaku {
     isDiamond: boolean; // 是否是钻粉
     nobleLv: string; // 贵族等级
     isNoble: boolean; // 贵族弹幕是否开启，1开
-    isAdmin: boolean; // 房管，data.rg为4则是房管
+    isRoomAdmin: boolean; // 房管，data.rg为4则是房管
     isSuper: boolean; // 超管，data.pg为5则为超管
     isVip: boolean; // vip，如果是 453/则为vip  454/则为超级vip
     key: string | number; // 唯一标识
@@ -95,12 +95,11 @@ interface IOptions {
     direction: "column" | "row"; // 纵向还是横向排列。值：row/column
     fontSize: number; // 字号大小
     size: Size; // 每个模块的占比%
-    // order: Size;
-    // align: string;
+    align: "left" | "right"; // 设置左右对齐。值：left/right
+    animation: boolean; // 是否开启动画
+    threshold: number; // 数据上限，超过上限的数据会被删除
+    transparent: boolean; // 是否背景透明
     
-    // threshold: number;
-    // transparent: boolean;
-    // animation: boolean;
     // isSaveData: boolean;
     // danmaku: Danmaku;
     // enter: Enter;

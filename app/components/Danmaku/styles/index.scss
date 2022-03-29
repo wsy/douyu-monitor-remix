@@ -4,6 +4,8 @@
     overflow-y: auto;
     content-visibility: auto;
     .item {
+        justify-content: var(--justifyContent, "flex-start");
+        text-align: var(--textAlign, "left");
         vertical-align: middle;
         width: 100%;
         margin-bottom: 5px;

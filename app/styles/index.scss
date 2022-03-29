@@ -33,3 +33,33 @@ html, body, #app {
 	text-align: center;
 	line-height: 25px;
 }
+
+.rv-radio-group {
+	margin-right: 10px;
+}
+
+.fadeInLeft {
+    animation: fadeInLeft 0.45s;
+}
+
+@-webkit-keyframes fadeInLeft {
+	0% {
+		opacity: .4;
+		-webkit-transform: translateX(30px);
+	}	
+	100% {
+		opacity: 1;
+		-webkit-transform: translateX(0);
+	}
+}
+ 
+@keyframes fadeInLeft {
+	0% {
+		opacity: .4;
+		transform: translateX(30px);
+	}	
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}

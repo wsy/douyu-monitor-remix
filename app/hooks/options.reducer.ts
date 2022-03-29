@@ -4,11 +4,15 @@ enum OPTIONS_ACTION {
     DIRECTION = "direction",
     FONTSIZE = "fontSize",
     SIZE = "size",
+    ALIGN = "align",
+    THRESHOLD = "threshold",
+    TRANSPARENT = "transparent",
+    ANIMATION = "animation",
 }
 
 interface IOptionsAction {
-    type: OPTIONS_ACTION,
-    payload?: any
+    type: OPTIONS_ACTION;
+    payload?: any;
 }
 
 // 默认配置，遵循数据驱动视图
@@ -22,6 +26,10 @@ const defaultOptions: IOptions = {
         gift: 25,
         danmaku: 30,
     },
+    align: "left",
+    threshold: 200,
+    transparent: false,
+    animation: true,
 };
 
 
@@ -39,10 +47,24 @@ const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
             break;
         case OPTIONS_ACTION.FONTSIZE:
             document.documentElement.style.setProperty('--avatarSize', String(Number(payload) * 2) + "px");
-            state.fontSize = payload;
+            state.fontSize = Number(payload);
             break;
         case OPTIONS_ACTION.SIZE:
             state.size = {...state.size, ...payload};
+            break;
+        case OPTIONS_ACTION.ALIGN:
+            document.documentElement.style.setProperty('--justifyContent', payload === "right" ? "flex-end" : "flex-start");
+            document.documentElement.style.setProperty('--textAlign', payload === "right" ? "right" : "left");
+            state.align = payload;
+            break;
+        case OPTIONS_ACTION.ANIMATION:
+            state.animation = payload;
+            break;
+        case OPTIONS_ACTION.TRANSPARENT:
+            state.transparent = payload;
+            break;
+        case OPTIONS_ACTION.THRESHOLD:
+            state.threshold = Number(payload);
             break;
         default:
             break;

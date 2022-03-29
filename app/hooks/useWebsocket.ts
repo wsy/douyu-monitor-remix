@@ -82,7 +82,7 @@ const useWebsocket = (options: any, allGiftData: IGiftData) => {
             isDiamond: !!data.diaf,
             nobleLv: data.nl,
             isNoble: !!data.nc,
-            isAdmin: data.rg == "4",
+            isRoomAdmin: data.rg == "4",
             isSuper: data.pg == "5",
             isVip: data.ail == "453/" || data.ail == "454/",
             key: data.cid,
