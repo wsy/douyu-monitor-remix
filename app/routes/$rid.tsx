@@ -56,10 +56,10 @@ export const loader: LoaderFunction = async ({params}) => {
 
 const Index = () => {
 	const { rid, allGift } = useLoaderData();
-	const { connectWs, closeWs, danmakuList } = useWebsocket({}, allGift);
-
-	const [isShowOptions, setIsShowOptions] = useState(false);
 	const [options, dispatchOptions] = useImmerReducer(optionsReducer, defaultOptions);
+	const { connectWs, closeWs, danmakuList } = useWebsocket(options, allGift);
+	const [isShowOptions, setIsShowOptions] = useState(false);
+	
 
 	useEffect(() => {
 		window.rid = rid;
@@ -144,6 +144,21 @@ const Index = () => {
 						<Field label="占比">
 							<Slider disabled={options.switch[options.switch.length-1] === "danmaku"} value={options.size.danmaku} onChange={(v: number) => dispatchOptions({type: OPTIONS_ACTION.SIZE, payload: {danmaku: v}})}/>
 						</Field>
+						<Field label="显示">
+							<Checkbox.Group value={options.danmaku.show} direction="horizontal" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_SHOW, payload: v})}>
+								<Checkbox name="level" shape="square">等级</Checkbox>
+								<Checkbox name="noble" shape="square">贵族</Checkbox>
+								<Checkbox name="fans" shape="square">粉丝牌</Checkbox>
+								<Checkbox name="avatar" shape="square">头像</Checkbox>
+								<Checkbox name="roomAdmin" shape="square">房管</Checkbox>
+								<Checkbox name="diamond" shape="square">钻粉</Checkbox>
+								<Checkbox name="color" shape="square">颜色</Checkbox>
+								<Checkbox name="vip" shape="square">VIP</Checkbox>
+							</Checkbox.Group>
+						</Field>
+						<Field value={String(options.danmaku.ban.level)} type="digit" label="屏蔽等级≤" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_LEVEL, payload: Number(v)})} placeholder="请输入屏蔽的等级" />
+						<Field value={options.danmaku.ban.keywords} label="屏蔽关键词" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS, payload: v})} placeholder="空格隔开 例如:弹幕1 弹幕2" />
+						<Field value={options.danmaku.ban.nicknames} label="屏蔽昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES, payload: v})} placeholder="模糊匹配 空格隔开 例如:昵称1 昵称2" />
 					</Tabs.TabPane> 
 					<Tabs.TabPane title="礼物">
 						<Field label="占比">

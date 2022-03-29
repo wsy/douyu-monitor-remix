@@ -52,7 +52,8 @@ const Default: FC<IProps> = (props) => {
             {props.showFans && !!data.fansName &&
             <div className={clsx("item__fans", {"is-diamonds": data.isDiamond}, "FansMedal", `fansLevel-${data.fansLv}`)}>
                 <span className="FansMedal-name">{data.fansName}</span>
-                <img className="FansMedalBox-diamondsIcon" src="https://sta-op.douyucdn.cn/douyu/2021/08/05/02304a1c04587e43ac626ce5ce07d935.png" alt="" loading="lazy"/>
+                {/* 钻粉 */}
+                {data.isDiamond && props.showDiamond && <img className="FansMedalBox-diamondsIcon" src="https://sta-op.douyucdn.cn/douyu/2021/08/05/02304a1c04587e43ac626ce5ce07d935.png" alt="" loading="lazy"/>}
             </div>}
             {/* 房管 */}
             {props.showRoomAdmin && data.isRoomAdmin &&

@@ -8,6 +8,10 @@ enum OPTIONS_ACTION {
     THRESHOLD = "threshold",
     TRANSPARENT = "transparent",
     ANIMATION = "animation",
+    DANMAKU_SHOW = "danmaku_show",
+    DANMAKU_BAN_LEVEL = "danmaku_ban_level",
+    DANMAKU_BAN_KEYWORDS = "danmaku_ban_keywords",
+    DANMAKU_BAN_NICKNAMES = "danmaku_ban_nicknames"
 }
 
 interface IOptionsAction {
@@ -30,6 +34,18 @@ const defaultOptions: IOptions = {
     threshold: 200,
     transparent: false,
     animation: true,
+    danmaku: {
+        // 设置弹幕显示内容，如果在数组里就显示
+        // level:等级  avatar:头像  fans:粉丝牌  noble:贵族  roomAdmin:房管  diamond:钻粉
+        show: ["level", "avatar", "fans", "noble", "roomAdmin", "diamond", "vip", "color"],
+        // 屏蔽项
+        ban: {
+            level: 0, // 等级
+            keywords: "", // 关键词
+            nicknames: "", // 关键昵称
+            isFilterRepeat: false, // 过滤重复弹幕，如果下一条内容与上一条一样，则丢弃
+        }
+    },
 };
 
 
@@ -65,6 +81,18 @@ const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
             break;
         case OPTIONS_ACTION.THRESHOLD:
             state.threshold = Number(payload);
+            break;
+        case OPTIONS_ACTION.DANMAKU_SHOW:
+            state.danmaku.show = [...payload];
+            break;
+        case OPTIONS_ACTION.DANMAKU_BAN_LEVEL:
+            state.danmaku.ban.level = Number(payload);
+            break;
+        case OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS:
+            state.danmaku.ban.keywords = payload;
+            break;
+        case OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES:
+            state.danmaku.ban.nicknames = payload;
             break;
         default:
             break;

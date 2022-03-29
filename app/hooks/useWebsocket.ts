@@ -28,7 +28,7 @@ const selectMsgType = (msgType: string): IMsgType => {
     return "";
 }
 
-const useWebsocket = (options: any, allGiftData: IGiftData) => {
+const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
     let ws: Ex_WebSocket_UnLogin | null = null;
     let stt = new STT();
 

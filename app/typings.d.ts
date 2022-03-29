@@ -91,7 +91,7 @@ interface IGift {
 
 interface IOptions {
     mode: "day" | "night"; // 日间模式还是夜间模式。值：day/night
-    switch: string[]; // 每个模块开关，同时指定了顺序。值：["enter", "gift", "danmaku"]
+    switch: string[]; // 每个模块开关，同时指定了顺序。值：["enter"; "gift"; "danmaku"]
     direction: "column" | "row"; // 纵向还是横向排列。值：row/column
     fontSize: number; // 字号大小
     size: Size; // 每个模块的占比%
@@ -99,16 +99,27 @@ interface IOptions {
     animation: boolean; // 是否开启动画
     threshold: number; // 数据上限，超过上限的数据会被删除
     transparent: boolean; // 是否背景透明
-    
+    danmaku: IOptionsDanmaku;
     // isSaveData: boolean;
-    // danmaku: Danmaku;
+    
     // enter: Enter;
     // gift: Gift;
     // [option: string]: any
 }
 
 interface Size {
-    danmaku: number,
-    enter: number,
-    gift: number,
+    danmaku: number;
+    enter: number;
+    gift: number;
+}
+
+interface IOptionsDanmaku {
+    show: string[]; // 弹幕显示元素。值：level:等级  avatar:头像  fans:粉丝牌  noble:贵族  roomAdmin:房管  diamond:钻粉  vip:VIP  color:弹幕颜色
+    ban: IOptionsDanmakuBan;
+}
+interface IOptionsDanmakuBan {
+    level: number; // 等级小于等于
+    keywords: string; // 关键词，用空格隔开
+    nicknames: string; // 关键昵称，用空格隔开
+    isFilterRepeat: boolean; // 是否过滤重复弹幕，如果下一条内容与上一条一样，则丢弃
 }

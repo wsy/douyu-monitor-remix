@@ -33,6 +33,14 @@ const Danmaku: FC<IProps> = ({options, danmakuList}) => {
 				data={item}
 				mode={options.mode}
 				showAnimation={options.animation}
+				showLevel={options.danmaku.show.includes("level")}
+				showNoble={options.danmaku.show.includes("noble")}
+				showFans={options.danmaku.show.includes("fans")}
+				showDiamond={options.danmaku.show.includes("diamond")}
+				showRoomAdmin={options.danmaku.show.includes("roomAdmin")}
+				showAvatar={options.danmaku.show.includes("avatar")}
+				showVip={options.danmaku.show.includes("vip")}
+				showColor={options.danmaku.show.includes("color")}
 				></Default>
 			})}
 			{isLock && <div className="gobottom" onClick={(e) => {e.stopPropagation();goToScrollBottom(wrapRef.current)}}>回到底部</div>}
