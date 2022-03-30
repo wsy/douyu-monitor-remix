@@ -38,10 +38,11 @@ const Gift: FC<IProps> = ({options, giftList, allGiftData}) => {
 	const checkHighlight = (data: IGift) => {
 		// 判断是否需要高亮
 		let giftData = allGiftData[data.gfid];
+		
         switch (data.type) {
             case GIFT_TYPE.GIFT:
                 // 高亮总价大于等于
-                return giftData.pc * Number(data.gfcnt) >= options.gift.totalPrice * 100;
+                return giftData && giftData.pc * Number(data.gfcnt) >= options.gift.totalPrice * 100;
             case GIFT_TYPE.FANS:
 				// 高亮粉丝牌升级大于
                 return Number(data.bl) >= options.gift.fansLevel;
@@ -54,7 +55,11 @@ const Gift: FC<IProps> = ({options, giftList, allGiftData}) => {
 		// 获取礼物的信息（图片 价格 名称）
 		switch (data.type) {
 			case GIFT_TYPE.GIFT:
-				return allGiftData[data.gfid];
+				if (allGiftData[data.gfid]) {
+					return allGiftData[data.gfid];
+				} else {
+					break;
+				}
 			case GIFT_TYPE.DIAMOND:
 				return {n: "钻粉", pic: DIAMOND_URL, pc: 0};
 			case GIFT_TYPE.NOBLE:

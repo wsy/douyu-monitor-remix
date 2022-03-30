@@ -117,7 +117,6 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
     }
 
     const handleGift = (data: any) => {
-        if (!isGiftValid(data)) return;
         let obj: IGift = {
             type: GIFT_TYPE.GIFT,
             name: "",
@@ -133,6 +132,7 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
         let tmp: any = {};
         switch (data.type) {
             case "dgb":
+                if (!isGiftValid(data)) return;
                 tmp = {
                     type: GIFT_TYPE.GIFT,
                     name: allGiftData[data.gfid].n,
@@ -188,7 +188,8 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
                 break;
             case "blab":
                 // 30级以下粉丝牌升级
-                if (data.drid !== window.rid) return; // 不在本房间开通则丢弃
+                if (data.rid !== window.rid) return; // 不在本房间开通则丢弃
+                if (!isFansLevelValid(data.bl)) return;
                 tmp = {
                     type: GIFT_TYPE.FANS,
                     name: `粉丝牌升到${data.bl}级`,
@@ -199,7 +200,8 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
                 break;
             case "fansupgradebroadcast":
                 // 30以上粉丝牌升级
-                if (data.drid !== window.rid) return; // 不在本房间开通则丢弃
+                if (data.rid !== window.rid) return; // 不在本房间开通则丢弃
+                if (!isFansLevelValid(data.otherContent)) return;
                 tmp = {
                     type: GIFT_TYPE.FANS,
                     name: `粉丝牌升到${data.otherContent}级`,
@@ -244,19 +246,17 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
     const isGiftValid = (data: any): boolean => {
         let giftData = allGiftData[data.gfid];
         if (giftData) {
-            // 常规礼物
             // 屏蔽单价
             if (giftData.pc < Number(options.current.gift.ban.price) * 100) return false;
             // 屏蔽关键词
             if (isArrayInText(options.current.gift.ban.keywords, giftData.n)) return false;
         }
-        
-        // 判断屏蔽粉丝牌升级等级
-        if (data.otherContent || data.bl) {
-            let level = data.bl || data.otherContent;
-            if (Number(options.current.gift.ban.fansLevel) > Number(level)) return false;
-        }
         return true;
+    }
+
+    const isFansLevelValid = (level: number) => {
+        // 判断屏蔽粉丝牌升级等级
+        return Number(options.current.gift.ban.fansLevel) <= level;
     }
 
     return {

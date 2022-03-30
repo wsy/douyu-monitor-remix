@@ -76,8 +76,10 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
     let { type, payload } = action;
     switch (type) {
         case OPTIONS_ACTION.RESET:
-            state = defaultOptions;
-            break;
+            document.documentElement.style.setProperty('--justifyContent', "flex-start");
+            document.documentElement.style.setProperty('--textAlign', "left");
+            document.documentElement.style.setProperty('--avatarSize', String(Number(state.fontSize) * 2) + "px");
+            return defaultOptions;
         case OPTIONS_ACTION.MODE:
             state.mode = payload;
             break;
@@ -115,10 +117,10 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.danmaku.ban.level = Number(payload);
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS:
-            state.danmaku.ban.keywords = String(payload).trim().split(" ") || [];
+            state.danmaku.ban.keywords = String(payload).trim().split(",") || [];
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES:
-            state.danmaku.ban.nicknames = String(payload).trim().split(" ") || [];
+            state.danmaku.ban.nicknames = String(payload).trim().split(",") || [];
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_ISFILTERREPEAT:
             state.danmaku.ban.isFilterRepeat = payload;
@@ -127,7 +129,7 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.enter.show = [...payload];
             break;
         case OPTIONS_ACTION.ENTER_KEYWORDS:
-            state.enter.keywords = String(payload).trim().split(" ") || [];
+            state.enter.keywords = String(payload).trim().split(",") || [];
             break;
         case OPTIONS_ACTION.ENTER_BAN_LEVEL:
             state.enter.ban.level = Number(payload);
@@ -139,7 +141,7 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.gift.ban.price = Number(payload);
             break;
         case OPTIONS_ACTION.GIFT_BAN_KEYWORDS:
-            state.gift.ban.keywords = String(payload).trim().split(" ") || [];
+            state.gift.ban.keywords = String(payload).trim().split(",") || [];
             break;
         case OPTIONS_ACTION.GIFT_BAN_FANSLEVEL:
             state.gift.ban.fansLevel = Number(payload);
