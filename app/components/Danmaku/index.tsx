@@ -4,8 +4,8 @@ import { getFlexStyle } from "~/utils";
 import Default from "./templates/Default/Default";
 
 interface IProps {
-    options: IOptions,
-    danmakuList: IDanmaku[],
+    options: IOptions;
+    danmakuList: IDanmaku[];
 }
 
 const FLAG = "danmaku";

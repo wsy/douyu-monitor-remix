@@ -1,11 +1,6 @@
-@import "../../../styles/themes/index.scss";
+@import "../../../../../styles/themes/index.scss";
 .danmaku {
-    overflow-x: hidden;
-    overflow-y: auto;
-    content-visibility: auto;
     .item {
-        justify-content: var(--justifyContent, "flex-start");
-        text-align: var(--textAlign, "left");
         vertical-align: middle;
         width: 100%;
         margin-bottom: 5px;
@@ -15,29 +10,20 @@
             margin-top: 5px;
         }
         >* {
+            vertical-align: middle;
             margin-right: 5px;
         }
         >:nth-last-child(1), >:nth-last-child(2) {
             margin-right: 0;
         }
-        .item__level {
-            vertical-align: middle;
-        }
         .item__fans {
             width: 60px;
             position: relative;
-            vertical-align: middle;
-        }
-    
-        .item__avatar {
-            vertical-align: middle;
         }
         .item__name {
-            vertical-align: middle;
             @include fontColor("nicknameColor");
         }
         .item__txt {
-            vertical-align: middle;
             @include fontColor("txtColor");
         }
     }

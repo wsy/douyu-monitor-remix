@@ -9,13 +9,8 @@ interface IGiftItem {
     pc: number;
 }
 
-interface IGiftList {
-    [gid: string]: IGiftItem;
-}
-
 interface IGiftData {
-    prefix: string;
-    data: IGiftList;
+    [gid: string]: IGiftItem;
 }
 
 // 贵族数据
@@ -89,8 +84,11 @@ interface IGift {
     key: string | number; // 唯一标识
 }
 
+// 主题切换
+type IMode = "day" | "night";
+
 interface IOptions {
-    mode: "day" | "night"; // 日间模式还是夜间模式。值：day/night
+    mode: IMode; // 日间模式还是夜间模式。值：day/night
     switch: string[]; // 每个模块开关，同时指定了顺序。值：["enter"; "gift"; "danmaku"]
     direction: "column" | "row"; // 纵向还是横向排列。值：row/column
     fontSize: number; // 字号大小
@@ -99,11 +97,11 @@ interface IOptions {
     animation: boolean; // 是否开启动画
     threshold: number; // 数据上限，超过上限的数据会被删除
     transparent: boolean; // 是否背景透明
-    danmaku: IOptionsDanmaku;
+    danmaku: IOptionsDanmaku; // 弹幕设置
+    gift: IOptionsGift;
     // isSaveData: boolean;
     
-    // enter: Enter;
-    // gift: Gift;
+    enter: IOptionsEnter; // 入场设置
     // [option: string]: any
 }
 
@@ -119,7 +117,29 @@ interface IOptionsDanmaku {
 }
 interface IOptionsDanmakuBan {
     level: number; // 等级小于等于
-    keywords: string; // 关键词，用空格隔开
-    nicknames: string; // 关键昵称，用空格隔开
+    keywords: string[]; // 关键词
+    nicknames: string[]; // 关键昵称
     isFilterRepeat: boolean; // 是否过滤重复弹幕，如果下一条内容与上一条一样，则丢弃
+}
+
+interface IOptionsEnter {
+    show: string[]; // 入场显示元素。值：level:等级  avatar:头像   noble:贵族
+    keywords: string[]; // 高亮关键昵称
+    ban: IOptionsEnterBan;
+}
+
+interface IOptionsEnterBan {
+    level: number; // 等级小于等于
+}
+
+interface IOptionsGift {
+    totalPrice: number; // 高亮总价大于等于
+    fansLevel: number; // 高亮粉丝牌升级大于等于
+    ban: IOptionsGiftBan;
+}
+
+interface IOptionsGiftBan {
+    price: number; // 价格小于
+    keywords: string[]; // 礼物昵称
+    fansLevel: number; // 粉丝牌升级显示等级>=
 }

@@ -1,5 +1,6 @@
 enum OPTIONS_ACTION {
-    RESET = "重置设置",
+    RESET = "reset",
+    MODE = "mode",
     SWITCH = "switch",
     DIRECTION = "direction",
     FONTSIZE = "fontSize",
@@ -11,7 +12,16 @@ enum OPTIONS_ACTION {
     DANMAKU_SHOW = "danmaku_show",
     DANMAKU_BAN_LEVEL = "danmaku_ban_level",
     DANMAKU_BAN_KEYWORDS = "danmaku_ban_keywords",
-    DANMAKU_BAN_NICKNAMES = "danmaku_ban_nicknames"
+    DANMAKU_BAN_NICKNAMES = "danmaku_ban_nicknames",
+    DANMAKU_BAN_ISFILTERREPEAT = "danmaku_ban_isFilterRepeat",
+    ENTER_SHOW = "enter_show",
+    ENTER_KEYWORDS = "enter_keywords",
+    ENTER_BAN_LEVEL = "enter_ban_level",
+    GIFT_TOTALPRICE = "gift_totalPrice",
+    GIFT_BAN_PRICE = "gift_ban_price",
+    GIFT_BAN_KEYWORDS = "gift_ban_keywords",
+    GIFT_BAN_FANSLEVEL = "gift_ban_fansLevel",
+    GIFT_FANSLEVEL = "gift_fansLevel",
 }
 
 interface IOptionsAction {
@@ -35,25 +45,41 @@ const defaultOptions: IOptions = {
     transparent: false,
     animation: true,
     danmaku: {
-        // 设置弹幕显示内容，如果在数组里就显示
-        // level:等级  avatar:头像  fans:粉丝牌  noble:贵族  roomAdmin:房管  diamond:钻粉
         show: ["level", "avatar", "fans", "noble", "roomAdmin", "diamond", "vip", "color"],
-        // 屏蔽项
         ban: {
-            level: 0, // 等级
-            keywords: "", // 关键词
-            nicknames: "", // 关键昵称
-            isFilterRepeat: false, // 过滤重复弹幕，如果下一条内容与上一条一样，则丢弃
+            level: 0,
+            keywords: [],
+            nicknames: [],
+            isFilterRepeat: false,
         }
     },
+    enter: {
+        show: ["level", "avatar", "noble"],
+        keywords: [],
+        ban: {
+            level: 0,
+        }
+    },
+    gift: {
+        totalPrice: 100,
+        fansLevel: 11,
+        ban: {
+            price: 0,
+            keywords: [],
+            fansLevel: 6,
+        }
+    }
 };
 
 
-const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
+const optionsReducer = (state: IOptions, action: IOptionsAction) => {
     let { type, payload } = action;
     switch (type) {
         case OPTIONS_ACTION.RESET:
             state = defaultOptions;
+            break;
+        case OPTIONS_ACTION.MODE:
+            state.mode = payload;
             break;
         case OPTIONS_ACTION.SWITCH:
             state.switch = payload;
@@ -89,15 +115,42 @@ const optionsReducer = (state: IOptions, action: IOptionsAction): IOptions => {
             state.danmaku.ban.level = Number(payload);
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS:
-            state.danmaku.ban.keywords = payload;
+            state.danmaku.ban.keywords = String(payload).trim().split(" ") || [];
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES:
-            state.danmaku.ban.nicknames = payload;
+            state.danmaku.ban.nicknames = String(payload).trim().split(" ") || [];
+            break;
+        case OPTIONS_ACTION.DANMAKU_BAN_ISFILTERREPEAT:
+            state.danmaku.ban.isFilterRepeat = payload;
+            break;
+        case OPTIONS_ACTION.ENTER_SHOW:
+            state.enter.show = [...payload];
+            break;
+        case OPTIONS_ACTION.ENTER_KEYWORDS:
+            state.enter.keywords = String(payload).trim().split(" ") || [];
+            break;
+        case OPTIONS_ACTION.ENTER_BAN_LEVEL:
+            state.enter.ban.level = Number(payload);
+            break;
+        case OPTIONS_ACTION.GIFT_TOTALPRICE:
+            state.gift.totalPrice = Number(payload);
+            break;
+        case OPTIONS_ACTION.GIFT_BAN_PRICE:
+            state.gift.ban.price = Number(payload);
+            break;
+        case OPTIONS_ACTION.GIFT_BAN_KEYWORDS:
+            state.gift.ban.keywords = String(payload).trim().split(" ") || [];
+            break;
+        case OPTIONS_ACTION.GIFT_BAN_FANSLEVEL:
+            state.gift.ban.fansLevel = Number(payload);
+            break;
+        case OPTIONS_ACTION.GIFT_FANSLEVEL:
+            state.gift.fansLevel = Number(payload);
             break;
         default:
             break;
     }
-    return state;
+    // return state;
 }
 
 export {

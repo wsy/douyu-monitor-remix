@@ -1,6 +1,8 @@
 @import "./themes/index.scss";
-// 引入components下所有的style
-@import "../components/Danmaku/styles/index.scss";
+// 引入components中templates下所有的style
+@import "../components/Danmaku/templates/Default/styles/index.scss";
+@import "../components/Enter/templates/Default/styles/index.scss";
+@import "../components/Gift/templates/Default/styles/index.scss";
 .monitor {
     @include backgroundColor("backgroundColor");
     width: 100%;
@@ -23,6 +25,16 @@
         width: var(--avatarSize, 28px);
         height: var(--avatarSize, 28px);
         border-radius: 50%;
+    }
+
+    .danmaku, .enter, .gift {
+        overflow-x: hidden;
+        overflow-y: auto;
+        content-visibility: auto;
+        .item {
+            justify-content: var(--justifyContent, "flex-start");
+            text-align: var(--textAlign, "left");
+        }
     }
 }
 

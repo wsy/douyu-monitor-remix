@@ -7,7 +7,7 @@ interface IProps {
     // 弹幕数据
     data: IDanmaku;
     // 日夜间模式
-    mode?: "day" | "night";
+    mode?: IMode;
     // 是否显示动画
     showAnimation?: boolean;
     // 是否显示用户等级
@@ -36,7 +36,7 @@ const Default: FC<IProps> = (props) => {
         } else if (data.isNoble || data.isVip) {
             return props.mode === "night" ? "noble-night" : "noble-day";
         } else {
-            return ""
+            return "";
         }
     }
     return (

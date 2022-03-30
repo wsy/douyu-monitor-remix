@@ -19,7 +19,7 @@ export function redirectUrl(url: string): void {
   }
 }
 
-export function getRoomGiftData(rid: string): Promise<IGiftList> {
+export function getRoomGiftData(rid: string): Promise<IGiftData> {
   return new Promise((resolve, reject) => {
     fetch("https://gift.douyucdn.cn/api/gift/v2/web/list?rid=" + rid, {
       method: "GET",
@@ -28,13 +28,13 @@ export function getRoomGiftData(rid: string): Promise<IGiftList> {
         return res.json();
       })
       .then((ret) => {
-        let roomGiftData: IGiftList = {};
+        let roomGiftData: IGiftData = {};
         if ("giftList" in ret.data) {
           for (let i = 0; i < ret.data.giftList.length; i++) {
             let item = ret.data.giftList[i];
             roomGiftData[item.id] = {
               n: item.name,
-              pic: item.basicInfo.focusPic,
+              pic: "https://gfs-op.douyucdn.cn/dygift" + item.basicInfo.focusPic,
               pc: item.priceInfo.price,
             };
           }
@@ -47,7 +47,7 @@ export function getRoomGiftData(rid: string): Promise<IGiftList> {
   });
 }
 
-export function getBagGiftData(): Promise<IGiftList> {
+export function getBagGiftData(): Promise<IGiftData> {
   return new Promise((resolve, reject) => {
     fetch(
       "http://webconf.douyucdn.cn/resource/common/prop_gift_list/prop_gift_config.json",
@@ -66,12 +66,12 @@ export function getBagGiftData(): Promise<IGiftList> {
         );
         json = json.substring(0, json.lastIndexOf(")"));
         json = JSON.parse(json);
-        let obj: IGiftList = {};
+        let obj: IGiftData = {};
         for (const key in json.data) {
           let item = json.data[key];
           obj[key] = {
             n: item.name,
-            pic: item.himg.replace("https://gfs-op.douyucdn.cn/dygift", ""),
+            pic: item.himg,
             pc: item.pc,
           };
         }
@@ -114,9 +114,20 @@ export function getStrMiddle(str: string, before: string, after: string): string
 	return m ? m[1] : "";
 }
 
-export const getFlexStyle = (options: IOptions, flag: "danmaku" | "gift" | "enter") => {
+export function getFlexStyle (options: IOptions, flag: "danmaku" | "gift" | "enter") {
 	return {
 		flex: options.switch[options.switch.length - 1] === flag ? "1" : `0 0 ${options.size[flag]}%`,
 		order: options.switch.indexOf(flag) * 2 + 1
 	}
+}
+
+export function isArrayInText(arr: string[], text: string) {
+  if (text !== "") {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] !== "" && text.indexOf(arr[i]) !== -1) {
+          return true;
+      }
+    }
+  }
+  return false;
 }

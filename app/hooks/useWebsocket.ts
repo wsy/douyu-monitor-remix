@@ -1,7 +1,7 @@
-import { getStrMiddle } from "~/utils";
+import { getStrMiddle, isArrayInText } from "~/utils";
 import { Ex_WebSocket_UnLogin } from "~/utils/libs/websocket";
 import { STT } from "~/utils/libs/stt";
-import { useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { nobleData } from "~/resources/nobleData";
 
 const MSG_TYPE: any = {
@@ -9,7 +9,7 @@ const MSG_TYPE: any = {
     gift: ["dgb", "odfbc", "rndfbc", "anbc", "rnewbc", "blab", "fansupgradebroadcast"],
     enter: ["uenter"],
 };
-enum GIFT_TYPE {
+export enum GIFT_TYPE {
     GIFT = "gift", // 普通礼物
     DIAMOND = "diamond", // 钻粉
     NOBLE = "noble", // 贵族
@@ -28,7 +28,7 @@ const selectMsgType = (msgType: string): IMsgType => {
     return "";
 }
 
-const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
+const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftData) => {
     let ws: Ex_WebSocket_UnLogin | null = null;
     let stt = new STT();
 
@@ -52,7 +52,7 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
 
     const msgHandler = (msg: string) => {
         let msgType = selectMsgType(getStrMiddle(msg, "type@=", "/"));
-        if (msgType === "") return;
+        if (msgType === "" || !options.current.switch.includes(msgType)) return;
         //  获得socekt序列化数据
         let data = stt.deserialize(msg);
         switch (msgType) {
@@ -71,6 +71,7 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
     }
 
     const handleDanmaku = (data: any) => {
+        if (!isDanmakuValid(data)) return;
         let obj: IDanmaku = {
             nn: data.nn,
             avatar: data.ic,
@@ -88,7 +89,7 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
             key: data.cid,
         };
         setDanmakuList(list => {
-            if (list.length > 500) {
+            if (list.length > options.current.threshold) {
                 return [...list.splice(1), obj];
             } else {
                 return [...list, obj];
@@ -98,6 +99,7 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
     }
 
     const handleEnter = (data: any) => {
+        if (!isEnterValid(data)) return;
         let obj: IEnter = {
             nn: data.nn,
             avatar: data.ic,
@@ -105,10 +107,17 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
             nobleLv: data.nl,
             key: new Date().getTime() + Math.random(),
         }
-        setEnterList(list => [...list, obj]);
+        setEnterList(list => {
+            if (list.length > options.current.threshold) {
+                return [...list.splice(1), obj];
+            } else {
+                return [...list, obj];
+            }
+        });
     }
 
     const handleGift = (data: any) => {
+        if (!isGiftValid(data)) return;
         let obj: IGift = {
             type: GIFT_TYPE.GIFT,
             name: "",
@@ -126,7 +135,7 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
             case "dgb":
                 tmp = {
                     type: GIFT_TYPE.GIFT,
-                    name: allGiftData.data[data.gfid].n,
+                    name: allGiftData[data.gfid].n,
                 };
                 break;
             case "odfbc":
@@ -136,8 +145,8 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     name: "开通钻粉",
                     nn: data.nick,
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             case "rndfbc": 
@@ -147,8 +156,8 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     name: "续费钻粉",
                     nn: data.nick,
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             case "anbc":
@@ -160,8 +169,8 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     nn: data.unk,
                     nl: data.nl, // 贵族等级
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             case "rnewbc":
@@ -173,8 +182,8 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     nn: data.unk,
                     nl: data.nl, // 贵族等级
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             case "blab":
@@ -184,8 +193,8 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     type: GIFT_TYPE.FANS,
                     name: `粉丝牌升到${data.bl}级`,
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             case "fansupgradebroadcast":
@@ -197,15 +206,57 @@ const useWebsocket = (options: IOptions, allGiftData: IGiftData) => {
                     nn: data.userName,
                     bl: data.otherContent,
                     gfid: "0",
-                    gfcnt: "1",
-                    hits: "1",
+                    gfcnt: "0",
+                    hits: "0",
                 }
                 break;
             default:
                 break;
         }
         obj = {...obj, ...tmp};
-        setGiftList(list => [...list, obj]);
+        setGiftList(list => {
+            if (list.length > options.current.threshold) {
+                return [...list.splice(1), obj];
+            } else {
+                return [...list, obj];
+            }
+        });
+    }
+
+    const isDanmakuValid = (data: any): boolean => {
+        // 判断屏蔽等级
+        if (Number(data.level) <= options.current.danmaku.ban.level) return false;
+        // 判断关键词
+        if (isArrayInText(options.current.danmaku.ban.keywords, data.txt)) return false;
+        // 判断关键昵称
+        if (isArrayInText(options.current.danmaku.ban.nicknames, data.nn)) return false;
+        // 过滤重复弹幕
+        if (options.current.danmaku.ban.isFilterRepeat && danmakuList.length > 0 && danmakuList[danmakuList.length - 1].txt === data.txt) return false;
+
+        return true;
+    }
+
+    const isEnterValid = (data: any): boolean => {
+        // 判断屏蔽等级
+        return Number(data.level) > Number(options.current.enter.ban.level);
+    }
+
+    const isGiftValid = (data: any): boolean => {
+        let giftData = allGiftData[data.gfid];
+        if (giftData) {
+            // 常规礼物
+            // 屏蔽单价
+            if (giftData.pc < Number(options.current.gift.ban.price) * 100) return false;
+            // 屏蔽关键词
+            if (isArrayInText(options.current.gift.ban.keywords, giftData.n)) return false;
+        }
+        
+        // 判断屏蔽粉丝牌升级等级
+        if (data.otherContent || data.bl) {
+            let level = data.bl || data.otherContent;
+            if (Number(options.current.gift.ban.fansLevel) > Number(level)) return false;
+        }
+        return true;
     }
 
     return {
