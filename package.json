@@ -8,7 +8,7 @@
     "build": "concurrently \"npm run sass\" \"remix build\"",
     "dev": "concurrently \"npm run sass:dev\" \"remix dev\"",
     "postinstall": "remix setup node",
-    "start": "remix-serve build",
+    "start": "set PORT=7001 && remix-serve build",
     "sass:dev": "sass --watch --no-source-map --style compressed app/:app/",
     "sass": "sass --no-source-map --style compressed app/:app/"
   },
