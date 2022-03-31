@@ -89,6 +89,8 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
             key: data.cid,
         };
         setDanmakuList(list => {
+            // 过滤重复弹幕
+            if (options.current.danmaku.ban.isFilterRepeat && list.length > 0 && list[list.length - 1].txt === data.txt) return list;
             if (list.length > options.current.threshold) {
                 return [...list.splice(1), obj];
             } else {
@@ -232,9 +234,6 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
         if (isArrayInText(options.current.danmaku.ban.keywords, data.txt)) return false;
         // 判断关键昵称
         if (isArrayInText(options.current.danmaku.ban.nicknames, data.nn)) return false;
-        // 过滤重复弹幕
-        if (options.current.danmaku.ban.isFilterRepeat && danmakuList.length > 0 && danmakuList[danmakuList.length - 1].txt === data.txt) return false;
-
         return true;
     }
 

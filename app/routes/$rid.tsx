@@ -1,5 +1,5 @@
 import { LinksFunction, LoaderFunction, MetaFunction, useLoaderData } from "remix";
-import { getBagGiftData, getRoomGiftData } from "~/utils";
+import { getBagGiftData, getLocalOptions, getRealRid, getRoomGiftData, saveLocalOptions } from "~/utils";
 import "@vant/touch-emulator";
 // import styleVantBase from "react-vant/es/styles/base.css";
 import stylesVant from "react-vant/lib/index.css";
@@ -19,6 +19,7 @@ import { defaultOptions, optionsReducer, OPTIONS_ACTION } from "~/hooks/options.
 import Enter from "~/components/Enter";
 import Gift from "~/components/Gift";
 import SplitLine from "~/components/SplitLine";
+import copy from "copy-to-clipboard";
 
 
 export const meta: MetaFunction = () => ({
@@ -38,28 +39,40 @@ export const links: LinksFunction = () => {
 	]
 }
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({params, request}) => {
 	const { rid } = params;
+	const url = new URL(request.url);
+	const exoptions = url.searchParams.get("exoptions");
 	let allGift: IGiftData = {};
+	let roomId = "";
 	if (rid) {
-		// let roomId = await getRealRid(rid);
-		let ret: any = await Promise.allSettled([getRoomGiftData(rid), getBagGiftData()]);
+		roomId = await getRealRid(rid) || rid;
+		let ret: any = await Promise.allSettled([getRoomGiftData(roomId), getBagGiftData()]);
 		allGift = {...ret[0].value, ...ret[1].value};
 	}
 	return {
-		rid,
-		allGift
+		rid: roomId || rid,
+		allGift,
+		exoptions,
 	}
 }
 
+interface ILoaderProps {
+	rid: string;
+	allGift: IGiftData;
+	exoptions: any;
+}
+
 const Index = () => {
-	const { rid, allGift } = useLoaderData<{rid: string, allGift: IGiftData}>();
+	const { rid, allGift, exoptions } = useLoaderData<ILoaderProps>();
 	const [options, dispatchOptions] = useImmerReducer(optionsReducer, defaultOptions);
 	const optionsRef = useRef(options);
 	const { connectWs, closeWs, danmakuList, enterList, giftList } = useWebsocket(optionsRef, allGift);
 	const [isShowOptions, setIsShowOptions] = useState(false);
 	
 	useEffect(() => {
+		logInfo();
+		initOptions();
 		window.rid = rid;
 		connectWs(rid);
 		return () => {
@@ -69,14 +82,21 @@ const Index = () => {
 	}, []);
 
 	useEffect(() => {
-		if (options.mode === "night") {
-			window.document.documentElement.setAttribute("data-theme", "night");
-		} else {
-			window.document.documentElement.setAttribute("data-theme", "day");
-		}
+		window.document.documentElement.setAttribute("data-theme", options.mode);
 	}, [options.mode]);
+
+	useEffect(() => {
+		document.documentElement.style.setProperty('--avatarSize', String(options.fontSize * 2) + "px");
+	}, [options.fontSize]);
+
+	useEffect(() => {
+		document.documentElement.style.setProperty('--justifyContent', options.align === "right" ? "flex-end" : "flex-start");
+		document.documentElement.style.setProperty('--textAlign', options.align);
+	}, [options.align]);
+
 	useEffect(() => {
 		optionsRef.current = options;
+		saveLocalOptions(options);
 	}, [options]);
 
 	const onClickRestOptions = () => {
@@ -87,6 +107,52 @@ const Index = () => {
 		.then(() => {
 			dispatchOptions({type: OPTIONS_ACTION.RESET})
 		}).catch(() => {});
+	}
+
+	const initOptions = () => {
+		// 这里用来恢复本地的options数据或者从url中解析出options，并加载
+		let tmpOptions = {};
+		if (exoptions) {
+			try {
+				tmpOptions = JSON.parse(decodeURIComponent(exoptions));
+			} catch (error) {
+				tmpOptions = {};
+			}
+		} else {
+			tmpOptions = getLocalOptions();
+		}
+		if (Object.keys(tmpOptions).length === 0) return;
+		dispatchOptions({type: OPTIONS_ACTION.SET, payload: tmpOptions});
+	}
+
+	const onClickShare = () => {
+		let url = location.href;
+		if (url.includes("?")) {
+			url += "&exoptions=";
+		} else {
+			url += "?exoptions=";
+		}
+		url += encodeURIComponent(JSON.stringify(options));
+		Dialog.confirm({
+			title: '复制分享链接',
+			message: '链接保存了当前设置，可粘贴至斗鱼直播伴侣浏览器源中，使设置与网页一致',
+		})
+		.then(() => {
+			copy(url);
+		}).catch(() => {});
+	}
+
+	const logInfo = () => {
+		console.log(`%c
+	______                    _____)
+	(, /    )                /
+	/    / ___             )__   __/
+	_/___ /_(_)(_(_(_/_(_(_/        /(__
+(_/___ /        .-/     (_____)  /
+				(_/
+
+%cContact: 小淳 189964430@qq.com`,'color:rgb(10,119,181);font-size:20px;font-weight:bold;', "color:rgb(10,119,181);font-size:16px;")
+		return;
 	}
 
     return (
@@ -115,7 +181,7 @@ const Index = () => {
 						<svg className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="20823" width="24" height="24"><path d="M438.857 73.143c0-40.396 32.466-73.143 73.143-73.143 40.396 0 73.143 32.466 73.143 73.143v73.143h-146.286v-73.143zM438.857 877.714h146.286v73.143c0 40.396-32.466 73.143-73.143 73.143-40.396 0-73.143-32.466-73.143-73.143v-73.143zM73.143 585.143c-40.396 0-73.143-32.466-73.143-73.143 0-40.396 32.466-73.143 73.143-73.143h73.143v146.286h-73.143zM877.714 585.143v-146.286h73.143c40.396 0 73.143 32.466 73.143 73.143 0 40.396-32.466 73.143-73.143 73.143h-73.143zM149.961 253.401c-28.564-28.564-28.763-74.676 0-103.44 28.564-28.564 74.676-28.763 103.44 0l51.719 51.719-103.44 103.44-51.722-51.719zM718.879 822.319l103.44-103.44 51.719 51.722c28.564 28.564 28.763 74.676 0 103.44-28.564 28.564-74.676 28.763-103.44 0l-51.719-51.719zM253.401 874.039c-28.564 28.564-74.676 28.763-103.44 0-28.564-28.564-28.763-74.676 0-103.44l51.719-51.719 103.44 103.44-51.719 51.722zM822.319 305.121l-103.44-103.44 51.722-51.719c28.564-28.564 74.676-28.763 103.44 0 28.564 28.564 28.763 74.676 0 103.44l-51.719 51.719zM512 804.571c161.583 0 292.571-130.989 292.571-292.571 0-161.583-130.989-292.571-292.571-292.571-161.583 0-292.571 130.989-292.571 292.571 0 161.583 130.989 292.571 292.571 292.571z" p-id="20824" fill="#8a8a8a"></path></svg>
 						}
 					</div>
-					<div onClick={() => {}}>
+					<div onClick={onClickShare}>
 						<svg className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2733" width="24" height="24"><path d="M380.36396 566.298587l300.553318 205.558677a149.295574 149.295574 0 1 1-38.731537 76.865893L338.262608 640.818406a149.295574 149.295574 0 1 1-13.180667-226.374746l318.938002-230.299087a149.295574 149.295574 0 1 1 43.082437 74.093261L375.501189 483.418215a149.039639 149.039639 0 0 1 4.905426 82.923028zM789.263209 213.406506a63.983817 63.983817 0 1 0 0-127.967635 63.983817 63.983817 0 0 0 0 127.967635z m0 725.149931a63.983817 63.983817 0 1 0 0-127.967635 63.983817 63.983817 0 0 0 0 127.967635z m-554.526418-341.247027a63.983817 63.983817 0 1 0 0-127.967634 63.983817 63.983817 0 0 0 0 127.967634z" fill="#8A8A8A" p-id="2734"></path></svg>
 					</div>
 					<div onClick={onClickRestOptions}>

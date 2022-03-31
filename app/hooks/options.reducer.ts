@@ -1,5 +1,8 @@
+import { formatObj } from "~/utils";
+
 enum OPTIONS_ACTION {
-    RESET = "reset",
+    RESET = "reset", // 恢复默认设置
+    SET = "set", // 设置options的值，用于初始化options
     MODE = "mode",
     SWITCH = "switch",
     DIRECTION = "direction",
@@ -76,10 +79,9 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
     let { type, payload } = action;
     switch (type) {
         case OPTIONS_ACTION.RESET:
-            document.documentElement.style.setProperty('--justifyContent', "flex-start");
-            document.documentElement.style.setProperty('--textAlign', "left");
-            document.documentElement.style.setProperty('--avatarSize', String(Number(state.fontSize) * 2) + "px");
             return defaultOptions;
+        case OPTIONS_ACTION.SET:
+            return formatObj(payload, defaultOptions);
         case OPTIONS_ACTION.MODE:
             state.mode = payload;
             break;
@@ -90,15 +92,12 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.direction = payload;
             break;
         case OPTIONS_ACTION.FONTSIZE:
-            document.documentElement.style.setProperty('--avatarSize', String(Number(payload) * 2) + "px");
             state.fontSize = Number(payload);
             break;
         case OPTIONS_ACTION.SIZE:
             state.size = {...state.size, ...payload};
             break;
         case OPTIONS_ACTION.ALIGN:
-            document.documentElement.style.setProperty('--justifyContent', payload === "right" ? "flex-end" : "flex-start");
-            document.documentElement.style.setProperty('--textAlign', payload === "right" ? "right" : "left");
             state.align = payload;
             break;
         case OPTIONS_ACTION.ANIMATION:
@@ -152,7 +151,6 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
         default:
             break;
     }
-    // return state;
 }
 
 export {
