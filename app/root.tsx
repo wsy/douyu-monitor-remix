@@ -14,7 +14,7 @@ export default function App() {
     redirectUrl(window.location.href);
   }, [])
   return (
-    <html lang="en">
+    <html lang="zh">
       <head>
         <Meta />
         <Links />
