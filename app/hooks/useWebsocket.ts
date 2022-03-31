@@ -215,7 +215,7 @@ const useWebsocket = (options: MutableRefObject<IOptions>, allGiftData: IGiftDat
                 }
                 break;
             default:
-                break;
+                return;
         }
         obj = {...obj, ...tmp};
         setGiftList(list => {
