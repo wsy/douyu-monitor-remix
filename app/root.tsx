@@ -28,3 +28,19 @@ export default function App() {
     </html>
   );
 }
+
+export function ErrorBoundary() {
+  return (
+    <html>
+      <head>
+        <title>错误</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>页面发生错误</h1>
+        <Scripts />
+      </body>
+    </html>
+  );
+}

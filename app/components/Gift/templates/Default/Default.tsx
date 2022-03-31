@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
 interface IProps {
     // 礼物数据
