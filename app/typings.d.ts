@@ -4,9 +4,9 @@ declare interface Window {
 
 // 礼物数据
 interface IGiftItem {
-    n: string;
-    pic: string;
-    pc: number;
+    n: string; // 礼物名称
+    pic: string; // 礼物图片
+    pc: number; // 礼物价格
 }
 
 interface IGiftData {
@@ -99,10 +99,7 @@ interface IOptions {
     transparent: boolean; // 是否背景透明
     danmaku: IOptionsDanmaku; // 弹幕设置
     gift: IOptionsGift;
-    // isSaveData: boolean;
-    
     enter: IOptionsEnter; // 入场设置
-    // [option: string]: any
 }
 
 interface Size {
