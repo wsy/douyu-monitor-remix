@@ -8,6 +8,8 @@ export function redirectUrl(url: string): void {
     "http://www.douyuex.com/",
     "https://douyuex.com/",
     "http://douyuex.com/",
+    "http://new.douyuex.com/",
+    "http://new.douyuex.com",
     "https://www.douyuex.com/introduction/",
     "https://www.douyuex.com/introduction",
     "https://www.douyuex.com/install/web.html",
