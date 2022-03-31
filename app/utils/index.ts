@@ -1,3 +1,5 @@
+const LOCAL_NAME = "monitor_options";
+
 export function redirectUrl(url: string): void {
   const HOSTS = [
     "https://www.douyuex.com",
@@ -86,18 +88,17 @@ export function getBagGiftData(): Promise<IGiftData> {
 export function getRealRid(rid: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fetch(
-      "https://m.douyu.com/" + rid,
+      "https://wxapp.douyucdn.cn/Live/Room/info/" + rid,
       {
         method: "GET",
         credentials: "include",
       }
     )
       .then((res) => {
-        return res.text();
+        return res.json();
       })
       .then((ret) => {
-        let rid = getStrMiddle(ret, `"rid":`, `,"`);
-        resolve(rid);
+        resolve(ret.data.room_id);
       })
       .catch((err) => {
         reject(err);
@@ -130,4 +131,30 @@ export function isArrayInText(arr: string[], text: string) {
     }
   }
   return false;
+}
+
+export function saveLocalOptions(options: IOptions) {
+	localStorage.setItem(LOCAL_NAME, JSON.stringify(options));
+}
+
+export function getLocalOptions(): any {
+	return JSON.parse(localStorage.getItem(LOCAL_NAME) || "{}");
+}
+
+export function formatObj(obj: any, objTemplate: any) {
+	let ret: any = {};
+	// 将obj格式化成objTemplate的属性格式，而obj的值不变，缺少的属性会增加上去
+	for (const key in objTemplate) {
+		if (key in obj) {
+			if (Object.prototype.toString.call(objTemplate[key]) === "[object Object]") {
+				let childRet = formatObj(obj[key], objTemplate[key]);
+				ret[key] = childRet;
+			} else {
+				ret[key] = obj[key];
+			}
+		} else {
+			ret[key] = objTemplate[key];
+		}
+	}
+	return ret;
 }

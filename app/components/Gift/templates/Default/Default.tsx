@@ -19,9 +19,6 @@ const Default: FC<IProps> = (props) => {
     const getItemClass = (): string => {
         return props.isHighlight ? `highlight-${props.mode}` : "";
     }
-    if (!giftData) {
-        console.log("内部捕捉", data, giftData);
-    }
     return (
         <div className={clsx("item", {"fadeInLeft": props.showAnimation}, getItemClass())}>
             <span className="item__gift">
