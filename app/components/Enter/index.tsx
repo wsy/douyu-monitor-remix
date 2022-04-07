@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from "react";
 import { useScroll } from "~/hooks/useScroll";
-import { getFlexStyle } from "~/utils";
+import { getFlexStyle, isArrayInText } from "~/utils";
 import Default from "./templates/Default/Default";
 
 interface IProps {
@@ -32,7 +32,7 @@ const Enter: FC<IProps> = ({options, enterList}) => {
 				return <Default key={item.key}
 				data={item}
 				mode={options.mode}
-				keywords={options.enter.keywords}
+				isHighlight={isArrayInText(options.enter.keywords, item.nn)}
 				showAnimation={options.animation}
 				showLevel={options.enter.show.includes("level")}
 				showNoble={options.enter.show.includes("noble")}

@@ -13,6 +13,7 @@ enum OPTIONS_ACTION {
     TRANSPARENT = "transparent",
     ANIMATION = "animation",
     DANMAKU_SHOW = "danmaku_show",
+    DANMAKU_KEYNICKNAMES = "danmaku_keyNicknames",
     DANMAKU_BAN_LEVEL = "danmaku_ban_level",
     DANMAKU_BAN_KEYWORDS = "danmaku_ban_keywords",
     DANMAKU_BAN_NICKNAMES = "danmaku_ban_nicknames",
@@ -49,6 +50,7 @@ const defaultOptions: IOptions = {
     animation: true,
     danmaku: {
         show: ["level", "avatar", "fans", "noble", "roomAdmin", "diamond", "vip", "color"],
+        keyNicknames: [],
         ban: {
             level: 0,
             keywords: [],
@@ -112,14 +114,17 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
         case OPTIONS_ACTION.DANMAKU_SHOW:
             state.danmaku.show = [...payload];
             break;
+        case OPTIONS_ACTION.DANMAKU_KEYNICKNAMES:
+            state.danmaku.keyNicknames = String(payload).split(",") || [];
+            break;
         case OPTIONS_ACTION.DANMAKU_BAN_LEVEL:
             state.danmaku.ban.level = Number(payload);
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS:
-            state.danmaku.ban.keywords = String(payload).trim().split(",") || [];
+            state.danmaku.ban.keywords = String(payload).split(",") || [];
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES:
-            state.danmaku.ban.nicknames = String(payload).trim().split(",") || [];
+            state.danmaku.ban.nicknames = String(payload).split(",") || [];
             break;
         case OPTIONS_ACTION.DANMAKU_BAN_ISFILTERREPEAT:
             state.danmaku.ban.isFilterRepeat = payload;
@@ -128,7 +133,7 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.enter.show = [...payload];
             break;
         case OPTIONS_ACTION.ENTER_KEYWORDS:
-            state.enter.keywords = String(payload).trim().split(",") || [];
+            state.enter.keywords = String(payload).split(",") || [];
             break;
         case OPTIONS_ACTION.ENTER_BAN_LEVEL:
             state.enter.ban.level = Number(payload);
@@ -140,7 +145,7 @@ const optionsReducer = (state: IOptions, action: IOptionsAction) => {
             state.gift.ban.price = Number(payload);
             break;
         case OPTIONS_ACTION.GIFT_BAN_KEYWORDS:
-            state.gift.ban.keywords = String(payload).trim().split(",") || [];
+            state.gift.ban.keywords = String(payload).split(",") || [];
             break;
         case OPTIONS_ACTION.GIFT_BAN_FANSLEVEL:
             state.gift.ban.fansLevel = Number(payload);

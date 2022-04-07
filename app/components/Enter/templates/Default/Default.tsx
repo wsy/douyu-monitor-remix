@@ -16,14 +16,14 @@ interface IProps {
     showNoble?: boolean;
     // 是否显示用户头像
     showAvatar?: boolean;
-    // 关键昵称
-    keywords?: string[];
+    // 是否高亮
+    isHighlight?: boolean;
 }
 
 const Default: FC<IProps> = (props) => {
-    const {data, keywords} = props;
+    const {data} = props;
     const getItemClass = (data: IEnter): string => {
-        if (isArrayInText(keywords as string[], data.nn)) {
+        if (props.isHighlight) {
             return `highlight-${props.mode}`;
         }
         if (data.nobleLv) {

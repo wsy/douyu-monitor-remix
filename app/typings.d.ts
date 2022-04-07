@@ -110,6 +110,7 @@ interface Size {
 
 interface IOptionsDanmaku {
     show: string[]; // 弹幕显示元素。值：level:等级  avatar:头像  fans:粉丝牌  noble:贵族  roomAdmin:房管  diamond:钻粉  vip:VIP  color:弹幕颜色
+    keyNicknames: string[]; // 高亮昵称
     ban: IOptionsDanmakuBan;
 }
 interface IOptionsDanmakuBan {

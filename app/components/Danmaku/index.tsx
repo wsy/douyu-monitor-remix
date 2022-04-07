@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from "react";
 import { useScroll } from "~/hooks/useScroll";
-import { getFlexStyle } from "~/utils";
+import { getFlexStyle, isArrayInText } from "~/utils";
 import Default from "./templates/Default/Default";
 
 interface IProps {
@@ -41,6 +41,7 @@ const Danmaku: FC<IProps> = ({options, danmakuList}) => {
 				showAvatar={options.danmaku.show.includes("avatar")}
 				showVip={options.danmaku.show.includes("vip")}
 				showColor={options.danmaku.show.includes("color")}
+				isHighlight={isArrayInText(options.danmaku.keyNicknames, item.nn)}
 				></Default>
 			})}
 			{isLock && <div className="gobottom" onClick={(e) => {e.stopPropagation();goToScrollBottom(wrapRef.current)}}>回到底部</div>}

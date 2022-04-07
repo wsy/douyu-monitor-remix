@@ -26,6 +26,8 @@ interface IProps {
     showVip?: boolean;
     // 是否显示弹幕颜色
     showColor?: boolean;
+    // 是否高亮
+    isHighlight?: boolean;
 }
 
 const Default: FC<IProps> = (props) => {
@@ -33,7 +35,7 @@ const Default: FC<IProps> = (props) => {
     const getItemClass = (data: IDanmaku): string => {
         if (data.isSuper) {
             return props.mode === "night" ? "super-night" : "super-day";
-        } else if (data.isNoble || data.isVip) {
+        } else if (data.isNoble || data.isVip || props.isHighlight) {
             return props.mode === "night" ? "noble-night" : "noble-day";
         } else {
             return "";

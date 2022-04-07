@@ -238,8 +238,9 @@ const Index = () => {
 							</Checkbox.Group>
 						</Field>
 						<Field value={String(options.danmaku.ban.level)} type="digit" label="屏蔽等级≤" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_LEVEL, payload: Number(v)})} placeholder="请输入屏蔽的等级" />
-						<Field value={options.danmaku.ban.keywords.join(",")} label="屏蔽关键词" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS, payload: v})} placeholder="英文逗号隔开 例如:弹幕1,弹幕2" />
-						<Field value={options.danmaku.ban.nicknames.join(",")} label="屏蔽昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES, payload: v})} placeholder="模糊匹配 英文逗号隔开 例如:昵称1,昵称2" />
+						<Field value={options.danmaku.ban.keywords.join(" ")} label="屏蔽关键词" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_KEYWORDS, payload: v})} placeholder="空格隔开 例如:弹幕1 弹幕2" />
+						<Field value={options.danmaku.ban.nicknames.join(" ")} label="屏蔽昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_NICKNAMES, payload: v})} placeholder="模糊匹配 空格隔开 例如:昵称1 昵称2" />
+						<Field value={options.danmaku.keyNicknames.join(" ")} label="高亮昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_KEYNICKNAMES, payload: v})} placeholder="模糊匹配 空格隔开 例如:昵称1 昵称2" />
 						<Field label="过滤重复">
 							<Switch size={20} checked={options.danmaku.ban.isFilterRepeat} onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.DANMAKU_BAN_ISFILTERREPEAT, payload: v})} />
 						</Field>
@@ -250,7 +251,7 @@ const Index = () => {
 						</Field>
 						<Field value={String(options.gift.ban.price)} label="屏蔽单价<" type="number" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_BAN_PRICE, payload: Number(v)})} placeholder="请输入单价" />
 						<Field value={String(options.gift.totalPrice)} label="高亮总价≥" type="number" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_TOTALPRICE, payload: Number(v)})} placeholder="请输入总价" />
-						<Field value={options.gift.ban.keywords.join(",")} label="屏蔽关键词" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_BAN_KEYWORDS, payload: v})} placeholder="英文逗号隔开 例如:荧光棒,鱼丸" />
+						<Field value={options.gift.ban.keywords.join(" ")} label="屏蔽关键词" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_BAN_KEYWORDS, payload: v})} placeholder="空格隔开 例如:荧光棒 鱼丸" />
 						<Field value={String(options.gift.ban.fansLevel)} label="粉丝牌等级≥" type="number" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_BAN_FANSLEVEL, payload: Number(v)})} placeholder="屏蔽粉丝牌等级" />
 						<Field value={String(options.gift.fansLevel)} label="高亮升级≥" type="number" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.GIFT_FANSLEVEL, payload: Number(v)})} placeholder="高亮粉丝牌升级" />
 					</Tabs.TabPane>
@@ -265,7 +266,7 @@ const Index = () => {
 								<Checkbox name="avatar" shape="square">头像</Checkbox>
 							</Checkbox.Group>
 						</Field>
-						<Field value={options.enter.keywords.join(",")} label="关键昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.ENTER_KEYWORDS, payload: v})} placeholder="英文逗号隔开 例如:昵称1,昵称2" />
+						<Field value={options.enter.keywords.join(" ")} label="关键昵称" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.ENTER_KEYWORDS, payload: v})} placeholder="空格隔开 例如:昵称1 昵称2" />
 						<Field value={String(options.enter.ban.level)} type="digit" label="屏蔽等级≤" onChange={(v) => dispatchOptions({type: OPTIONS_ACTION.ENTER_BAN_LEVEL, payload: Number(v)})} placeholder="请输入屏蔽的等级" />
 					</Tabs.TabPane>
 				</Tabs>
