@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import { FC } from "react";
+import type { FC } from "react";
 import { nobleData } from "~/resources/nobleData";
-import { isArrayInText } from "~/utils";
 
 interface IProps {
     // 进场数据

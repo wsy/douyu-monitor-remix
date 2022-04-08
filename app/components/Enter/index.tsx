@@ -1,4 +1,5 @@
-import { FC, useEffect, useRef } from "react";
+import type { FC} from "react";
+import { useEffect, useRef } from "react";
 import { useScroll } from "~/hooks/useScroll";
 import { getFlexStyle, isArrayInText } from "~/utils";
 import Default from "./templates/Default/Default";

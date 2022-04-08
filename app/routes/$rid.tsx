@@ -1,4 +1,5 @@
-import { LinksFunction, LoaderFunction, MetaFunction, useLoaderData } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction} from "remix";
+import { useLoaderData } from "remix";
 import { getBagGiftData, getLocalOptions, getRealRid, getRoomGiftData, saveLocalOptions } from "~/utils";
 import "@vant/touch-emulator";
 // import styleVantBase from "react-vant/es/styles/base.css";

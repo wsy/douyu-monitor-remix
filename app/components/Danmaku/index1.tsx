@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import type { FC} from "react";
+import { useEffect, useState } from "react";
 import useVirtual from "react-cool-virtual";
 import { isArrayInText } from "~/utils";
 import Default from "./templates/Default/Default";
@@ -12,7 +13,7 @@ let isScrolling = false;
 
 const Danmaku: FC<IProps> = ({options, danmakuList}) => {
     const [shouldSticky, setShouldSticky] = useState(true);
-    const { outerRef, innerRef, items, scrollToItem, scrollTo } = useVirtual<HTMLDivElement>({
+    const { outerRef, innerRef, items, scrollTo } = useVirtual<HTMLDivElement>({
         itemCount: danmakuList.length,
         onScroll: ({ userScroll }) => {
           if (userScroll && !isScrolling) setShouldSticky(false);

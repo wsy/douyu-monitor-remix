@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC } from "react";
+import type { FC } from "react";
 import { danmakuColor } from "~/resources/danmakuColor";
 import { nobleData } from "~/resources/nobleData";
 

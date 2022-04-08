@@ -1,4 +1,5 @@
-import { FC, useEffect, useRef } from "react";
+import type { FC} from "react";
+import { useEffect, useRef } from "react";
 import { useScroll } from "~/hooks/useScroll";
 import { GIFT_TYPE } from "~/hooks/useWebsocket";
 import { nobleData } from "~/resources/nobleData";
